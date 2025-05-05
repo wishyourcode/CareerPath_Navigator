@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block title %} Quiz Question Manager {% endblock %}
+
+{% block content %}
+<div class="quiz-manager-container">
+    <!-- Add Question Section -->
+    <div class="quiz-manager-card">
+        <div class="quiz-manager-header">
+            <h2 class="quiz-manager-title">Add New Question</h2>
+            <div class="quiz-manager-divider"></div>
+        </div>
+        <form action="/add_question/" method="POST" class="quiz-manager-form"> 
+            {% csrf_token %}
+            <div class="quiz-form-fields">
+                {% for field in form %}
+                <div class="quiz-form-group">
+                    <label for="{{ field.id_for_label }}" class="quiz-form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                    <small class="quiz-form-help">{{ field.help_text }}</small>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="quiz-form-actions">
+                <button type="submit" class="quiz-btn quiz-btn-primary">
+                    <i class="fas fa-plus-circle"></i> Add Question
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Questions List Section -->
+    <div class="quiz-manager-card">
+        <div class="quiz-manager-header">
+            <h2 class="quiz-manager-title">Manage Questions</h2>
+            <div class="quiz-manager-divider"></div>
+        </div>
+        
+        <div class="quiz-table-container">
+            <table class="quiz-table">
+                <thead class="quiz-table-head">
+                    <tr>
+                        <th>Question</th>
+                        <th>Quiz</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="recent-questions" class="quiz-table-body">
+                    {% for question in questions|slice:":10" %}
+                    <tr class="quiz-table-row">
+                        <td class="quiz-table-data">
+                            <a href="/add_options/{{ question.id }}/" class="quiz-link">
+                                <i class="fas fa-question-circle"></i> {{ question.text|truncatechars:50 }}
+                            </a>
+                        </td>
+                        <td class="quiz-table-data">{{ question.quiz }}</td>
+                        <td class="quiz-table-data quiz-actions">
+                            <a href="/delete_question/{{ question.id }}/" class="quiz-btn quiz-btn-sm quiz-btn-danger">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tbody id="all-questions" class="quiz-table-body" style="display: none;">
+                    {% for question in questions %}
+                    <tr class="quiz-table-row">
+                        <td class="quiz-table-data">
+                            <a href="/add_options/{{ question.id }}/" class="quiz-link">
+                                <i class="fas fa-question-circle"></i> {{ question.text|truncatechars:50 }}
+                            </a>
+                        </td>
+                        <td class="quiz-table-data">{{ question.quiz }}</td>
+                        <td class="quiz-table-data quiz-actions">
+                            <a href="/delete_question/{{ question.id }}/" class="quiz-btn quiz-btn-sm quiz-btn-danger">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        {% if questions.count > 10 %}
+        <div class="quiz-table-footer">
+            <button id="show-all-btn" class="quiz-btn quiz-btn-outline">
+                <i class="fas fa-chevron-down"></i> Show All Questions
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const showAllBtn = document.getElementById('show-all-btn');
+    if (showAllBtn) {
+        showAllBtn.addEventListener('click', function() {
+            const recentQuestions = document.getElementById('recent-questions');
+            const allQuestions = document.getElementById('all-questions');
+            const icon = this.querySelector('i');
+            
+            if (allQuestions.style.display === 'none') {
+                recentQuestions.style.display = 'none';
+                allQuestions.style.display = '';
+                this.innerHTML = '<i class="fas fa-chevron-up"></i> Show Recent Only';
+            } else {
+                recentQuestions.style.display = '';
+                allQuestions.style.display = 'none';
+                this.innerHTML = '<i class="fas fa-chevron-down"></i> Show All Questions';
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

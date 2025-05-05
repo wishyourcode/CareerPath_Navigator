@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'contact/contact.css' %}">
+
+<!-- Team Section -->
+<section class="team-section">
+    <div class="decor-circle circle-1"></div>
+    <div class="decor-circle circle-2"></div>
+    
+    <div class="container">
+        <div class="section-header">
+            <h2>Meet Our Creative Team</h2>
+            <p>We're a passionate collective of innovators, creators, and problem-solvers. Each member brings unique talents to the table, blending creativity with technical expertise to deliver exceptional results.</p>
+        </div>
+        
+        <!-- Mentor Card -->
+        <div class="row">
+            <div class="col-12">
+                <div class="team-card mentor-card">
+                    <div class="team-img-container">
+                        <img src="{% static 'manthan.jpeg' %}" alt="Prof. Manthan Joshi">
+                        <div class="team-social">
+                            <a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                            <a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="mailto:mentor@example.com"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h4>Prof. Manthan Joshi</h4>
+                        <p class="designation">Project Guide & Mentor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Team Members -->
+        <div class="row">
+            <div class="col-lg-4 col-md-6">
+                <div class="team-card">
+                    <div class="team-img-container">
+                        <img src="{% static 'image1.jpeg' %}" alt="Mehraj Mishra">
+                        <div class="team-social">
+                            <a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                            <a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="mailto:mehraj@example.com"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h4>Mehraj Mishra</h4>
+                        <p class="designation">Frontend Architect</p>
+                        <p class="mt-2">Crafting beautiful, responsive interfaces with pixel perfection</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="team-card">
+                    <div class="team-img-container">
+                        <img src="{% static 'image2.jpeg' %}" alt="Vishal Mishra">
+                        <div class="team-social">
+                            <a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                            <a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="mailto:vishal@example.com"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h4>Vishal Mishra</h4>
+                        <p class="designation">Backend Wizard</p>
+                        <p class="mt-2">Building robust server architectures and APIs</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="team-card">
+                    <div class="team-img-container">
+                        <img src="{% static 'vansh.jpeg' %}" alt="Vansh Gusain">
+                        <div class="team-social">
+                            <a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                            <a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="mailto:vansh@example.com"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h4>Vansh Gusain</h4>
+                        <p class="designation">UI/UX Specialist</p>
+                        <p class="mt-2">Creating intuitive user experiences with stunning visuals</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

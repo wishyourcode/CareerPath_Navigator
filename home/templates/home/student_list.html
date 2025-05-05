@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="nopadding">
+<div class="approved-faculty-container">
+    <div class="approved-faculty-header">
+        <div class="approved-header-content">
+            <h2 class="approved-faculty-title">Student List</h2>
+            <p class="approved-faculty-subtitle">Manage all registered student accounts</p>
+        </div>
+        <div class="approved-faculty-count">
+            <div class="approved-count-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="approved-count-content">
+                <span class="approved-count-number">{{ students.count }}</span>
+                <span class="approved-count-label">Registered Students</span>
+            </div>
+        </div>
+    </div>
+
+    {% if students %}
+    <div class="approved-table-responsive">
+        <table class="approved-faculty-table">
+            <thead>
+                <tr>
+                    <th class="approved-name">ID</th>
+                    <th class="approved-username">Username</th>
+                    <th class="approved-email">Email</th>
+                    <th class="approved-date">Join Date</th>
+                    <th class="approved-actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td class="approved-name" data-label="ID">
+                        {{ student.id }}
+                    </td>
+                    <td class="approved-username" data-label="Username">
+                        <span class="approved-username-badge">@{{ student.username }}</span>
+                    </td>
+                    <td class="approved-email" data-label="Email">
+                        <a href="mailto:{{ student.email }}">
+                            <i class="fas fa-envelope"></i>
+                            {{ student.email }}
+                        </a>
+                    </td>
+                    <td class="approved-date" data-label="Joined">
+                        <i class="far fa-calendar-alt"></i>
+                        {{ student.date_joined|date:"M d, Y" }}
+                    </td>
+                    <td class="approved-actions" data-label="Actions">
+                        <div class="approved-action-buttons">
+                            <a href="{% url 'confirm_student_delete' student.id %}" class="approved-btn-action approved-delete" title="Delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    {% else %}
+    <div class="approved-no-faculty-message">
+        <div class="approved-empty-state">
+            <div class="approved-empty-icon">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <h3>No Students Found</h3>
+            <p>There are currently no student accounts registered in the system.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,295 @@
+{% extends 'base.html' %}
+{% block title %} Quiz {% endblock %}
+{% block content %}
+<main class="dashboard-container">
+  <div class="dashboard-title">
+      <h2>Student Performance Dashboard</h2>
+  </div>
+
+  <div class="dashboard-cards">
+      <div class="dashboard-card">
+          <div class="dashboard-card-inner">
+              <h3>ASSIGNMENTS</h3>
+          </div>
+          <h1>21</h1>
+          <p>Completed this semester</p>
+      </div>
+
+      <div class="dashboard-card">
+          <div class="dashboard-card-inner">
+              <h3>ATTENDANCE</h3>
+          </div>
+          <h1>92%</h1>
+          <p>Overall attendance rate</p>
+      </div>
+
+      <div class="dashboard-card">
+          <div class="dashboard-card-inner">
+              <h3>PERFORMANCE</h3>
+          </div>
+          <h1>87%</h1>
+          <p>Average score</p>
+      </div>
+
+      <div class="dashboard-card">
+          <div class="dashboard-card-inner">
+              <h3>UPCOMING</h3>
+          </div>
+          <h1>3</h1>
+          <p>Exams scheduled</p>
+      </div>
+  </div>
+
+  <div class="dashboard-charts">
+      <div class="dashboard-charts-card">
+          <h2 class="chart-title">Assignment Progress</h2>
+          <div class="chart-container" id="bar-chart"></div>
+      </div>
+
+      <div class="dashboard-charts-card">
+          <h2 class="chart-title">Weekly Performance</h2>
+          <div class="chart-container" id="area-chart"></div>
+      </div>
+
+      <div class="dashboard-charts-card">
+          <h2 class="chart-title">Skill Analysis</h2>
+          <div class="chart-container">
+              <canvas id="myDoughnutChart"></canvas>
+          </div>
+      </div>
+
+      <div class="dashboard-charts-card">
+          <h2 class="chart-title">Attendance Breakdown</h2>
+          <div class="chart-container">
+              <canvas id="pieChart"></canvas>
+          </div>
+      </div>
+  </div>
+</main>
+{% endblock %}
+{% block js %}
+<!-- Load Chart.js first -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Then load ApexCharts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.5/apexcharts.min.js"></script>
+
+<script>
+// Initialize charts only when DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // BAR CHART
+    const barChartOptions = {
+        series: [{
+            name: 'Scores',
+            data: [85, 72, 90, 88, 94]
+        }],
+        chart: {
+            type: 'bar',
+            height: 350,
+            background: 'transparent',
+            toolbar: { show: false },
+            fontFamily: 'Times New Roman',
+            animations: {
+                enabled: true,
+                easing: 'easeinout',
+                speed: 800,
+                animateGradually: {
+                    enabled: true,
+                    delay: 150
+                },
+                dynamicAnimation: {
+                    enabled: true,
+                    speed: 350
+                }
+            }
+        },
+        colors: ['#4CAF50', '#2196F3', '#FFC107', '#9C27B0', '#607D8B'],
+        plotOptions: {
+            bar: {
+                borderRadius: 8,
+                columnWidth: '45%',
+                distributed: false
+            }
+        },
+        dataLabels: {
+            enabled: true,
+            style: {
+                fontSize: '14px',
+                fontFamily: 'Times New Roman',
+                colors: ['#fff']
+            },
+            offsetY: -20
+        },
+        grid: { borderColor: 'rgba(255, 255, 255, 0.1)' },
+        xaxis: {
+            categories: ['Math', 'Science', 'Literature', 'History', 'Arts'],
+            labels: {
+                style: {
+                    colors: '#fff',
+                    fontSize: '14px',
+                    fontFamily: 'Times New Roman'
+                }
+            }
+        },
+        yaxis: {
+            min: 0,
+            max: 100,
+            labels: {
+                style: {
+                    colors: '#fff',
+                    fontSize: '14px',
+                    fontFamily: 'Times New Roman'
+                }
+            }
+        }
+    };
+
+    const barChart = new ApexCharts(document.querySelector('#bar-chart'), barChartOptions);
+    barChart.render();
+
+    // AREA CHART
+    const areaChartOptions = {
+        series: [
+            {
+                name: 'Current Week',
+                data: [85, 72, 86, 81, 89, 92, 88]
+            },
+            {
+                name: 'Previous Week',
+                data: [78, 85, 72, 79, 83, 76, 81]
+            }
+        ],
+        chart: {
+            height: 350,
+            type: 'area',
+            background: 'transparent',
+            toolbar: { show: false },
+            fontFamily: 'Times New Roman',
+            animations: {
+                enabled: true,
+                easing: 'easeinout',
+                speed: 800
+            }
+        },
+        colors: ['#4CAF50', '#2196F3'],
+        stroke: {
+            curve: 'smooth',
+            width: 3
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 0.7,
+                opacityTo: 0.3,
+                stops: [0, 90, 100]
+            }
+        },
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        grid: { borderColor: 'rgba(255, 255, 255, 0.1)' },
+        xaxis: {
+            labels: {
+                style: {
+                    colors: '#fff',
+                    fontSize: '14px',
+                    fontFamily: 'Times New Roman'
+                }
+            }
+        },
+        yaxis: {
+            min: 50,
+            max: 100,
+            labels: {
+                style: {
+                    colors: '#fff',
+                    fontSize: '14px',
+                    fontFamily: 'Times New Roman'
+                }
+            }
+        }
+    };
+
+    const areaChart = new ApexCharts(document.querySelector('#area-chart'), areaChartOptions);
+    areaChart.render();
+
+    // PIE CHART (Attendance)
+    const pieData = {
+        labels: ['Present', 'Late', 'Absent'],
+        datasets: [{
+            data: [85, 5, 10],
+            backgroundColor: ['#4CAF50', '#FFC107', '#F44336'],
+            borderColor: ['#388E3C', '#FFA000', '#D32F2F'],
+            borderWidth: 1
+        }]
+    };
+
+    const pieConfig = {
+        type: 'pie',
+        data: pieData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#fff',
+                        font: {
+                            family: 'Times New Roman',
+                            size: 14
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    new Chart(
+        document.getElementById('pieChart'),
+        pieConfig
+    );
+
+    // DOUGHNUT CHART (Skills)
+    const doughnutData = {
+        labels: ['Problem Solving', 'Creativity', 'Teamwork', 'Research', 'Communication'],
+        datasets: [{
+            data: [85, 75, 90, 80, 88],
+            backgroundColor: [
+                'rgba(76, 175, 80, 0.8)',
+                'rgba(33, 150, 243, 0.8)',
+                'rgba(255, 193, 7, 0.8)',
+                'rgba(156, 39, 176, 0.8)',
+                'rgba(96, 125, 139, 0.8)'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    const doughnutConfig = {
+        type: 'doughnut',
+        data: doughnutData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '70%',
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        color: '#fff',
+                        font: {
+                            family: 'Times New Roman',
+                            size: 14
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    new Chart(
+        document.getElementById('myDoughnutChart'),
+        doughnutConfig
+    );
+});
+</script>
+{% endblock %}

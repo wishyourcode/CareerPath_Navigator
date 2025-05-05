@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="faculty-approvals-wrapper">
+    <div class="approvals-header">
+        <h2 class="approvals-heading">Pending Faculty Approvals</h2>
+        <div class="approvals-count">
+            <span class="count-number">{{ pending_faculty|length }}</span>
+            <span class="count-label">Requests</span>
+        </div>
+    </div>
+
+    {% if pending_faculty %}
+    <div class="approvals-list">
+        <div class="list-header">
+            <div class="header-item name">Faculty Name</div>
+            <div class="header-item username">Username</div>
+            <div class="header-item email">Email</div>
+            <div class="header-item date">Join Date</div>
+            <div class="header-item actions">Actions</div>
+        </div>
+        
+        {% for faculty in pending_faculty %}
+        <div class="list-row">
+            <div class="list-item name">
+                <span class="mobile-label">Name:</span>
+                {{ faculty.full_name }}
+            </div>
+            <div class="list-item username">
+                <span class="mobile-label">Username:</span>
+                {{ faculty.username }}
+            </div>
+            <div class="list-item email">
+                <span class="mobile-label">Email:</span>
+                {{ faculty.email }}
+            </div>
+            <div class="list-item date">
+                <span class="mobile-label">Joined:</span>
+                {{ faculty.date_joined|date:"M d, Y" }}
+            </div>
+            <div class="list-item actions">
+                <a href="{% url 'approve_faculty' faculty.id %}" class="action-btn approve">
+                    Approve
+                </a>
+                <a href="{% url 'reject_faculty' faculty.id %}" class="action-btn reject">
+                    Reject
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-approvals-message">
+        <i class="fas fa-check-circle"></i>
+        <h3>No Pending Approvals</h3>
+        <p>All faculty accounts have been processed.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

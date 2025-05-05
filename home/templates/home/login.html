@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Login{% endblock %}
+
+{% block css %}
+<style>
+/* Main login container */
+.login-page-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f9ff 0%, #e6f3ff 100%);
+  padding: 20px;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 450px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 82, 204, 0.15);
+  position: relative;
+  z-index: 1;
+}
+
+/* Header section */
+.login-header {
+  background: linear-gradient(135deg, #0066cc 0%, #0099ff 100%);
+  color: white;
+  padding: 25px;
+  text-align: center;
+}
+
+.login-header h2 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.8rem;
+  letter-spacing: 0.5px;
+}
+
+/* Message/alerts section */
+.message-container {
+  padding: 0 25px;
+  margin-top: 20px;
+}
+
+.alert-message {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  animation: fadeIn 0.4s ease-out;
+  border-left: 4px solid transparent;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.alert-error {
+  background-color: #fde8e8;
+  border-left-color: #dc3545;
+  color: #dc3545;
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  border-left-color: #ffc107;
+  color: #856404;
+}
+
+.alert-icon {
+  margin-right: 12px;
+  font-size: 1.3rem;
+}
+
+/* Form section */
+.form-container {
+  padding: 25px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #d1d9e6;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s;
+  background-color: #f8fafc;
+}
+
+.form-control:focus {
+  border-color: #0066cc;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+  outline: none;
+  background-color: white;
+}
+
+/* Button styles */
+.btn-login {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #0066cc 0%, #0099ff 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 10px;
+  box-shadow: 0 2px 10px rgba(0, 102, 204, 0.2);
+}
+
+.btn-login:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
+}
+
+.btn-login:active {
+  transform: translateY(0);
+}
+
+/* Bottom links */
+.bottom-links {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.bottom-links a {
+  color: #0066cc;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.bottom-links a:hover {
+  color: #004080;
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .login-container {
+    border-radius: 10px;
+  }
+  
+  .login-header {
+    padding: 20px;
+  }
+  
+  .login-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .form-container,
+  .message-container {
+    padding: 20px;
+  }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-page-wrapper">
+  <div class="login-container">
+    <div class="login-header">
+      <h2>Welcome Back</h2>
+    </div>
+    
+    <!-- Messages Container -->
+    <div class="message-container">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert-message {% if message.tags == 'error' %}alert-error{% else %}alert-warning{% endif %}">
+            <span class="alert-icon">
+              {% if message.tags == 'error' %}
+                <i class="fas fa-exclamation-circle"></i>
+              {% else %}
+                <i class="fas fa-exclamation-triangle"></i>
+              {% endif %}
+            </span>
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+    
+    <!-- Login Form -->
+    <div class="form-container">
+      <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+        
+        <div class="form-group">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" class="form-control" id="username" name="username" 
+                 value="{{ request.POST.username }}" required autofocus>
+        </div>
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        
+        <button type="submit" class="btn-login">
+          Log In
+        </button>
+        
+        <div class="bottom-links">
+          Don't have an account? <a href="{% url 'signup' %}">Sign up</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Auto-focus on username field if there are messages
+  {% if messages %}
+    document.getElementById('username').focus();
+    
+  {% endif %}
+  
+  // Add animation to alert messages
+  const alerts = document.querySelectorAll('.alert-message');
+  alerts.forEach((alert, index) => {
+    alert.style.animationDelay = `${index * 0.1}s`;
+  });
+});
+</script>
+{% endblock %}

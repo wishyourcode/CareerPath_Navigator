@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %} Quiz Results Dashboard {% endblock %}
+{% block content %}
+<div class="quiz-results-panel">
+    <div class="quiz-results-card">
+        <div class="quiz-results-header">
+            <h2 class="quiz-results-title">Quiz Results Dashboard</h2>
+            <div class="quiz-results-divider"></div>
+            <div class="quiz-results-count">
+                <span class="quiz-count-number">{{ marks.count }}</span>
+                <span class="quiz-count-label">Results</span>
+            </div>
+        </div>
+        
+        <div class="quiz-table-wrapper">
+            <table class="quiz-results-table">
+                <thead class="quiz-table-head">
+                    <tr>
+                        <th class="quiz-th-user">User</th>
+                        <th class="quiz-th-quiz">Quiz</th>
+                        <th class="quiz-th-score">Score</th>
+                        <th class="quiz-th-actions">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="quiz-table-body">
+                    {% for mark in marks %}
+                    <tr class="quiz-table-row">
+                        <td class="quiz-table-data">{{ mark.user }}</td>
+                        <td class="quiz-table-data">{{ mark.quiz }}</td>
+                        <td class="quiz-table-data">
+                            <span class="quiz-score-pill">{{ mark.score }}</span>
+                        </td>
+                        <td class="quiz-table-data quiz-actions-cell">
+                            <a href="/delete_result/{{ mark.id }}/" class="quiz-action-btn quiz-delete-btn">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        {% if marks.count == 0 %}
+        <div class="quiz-empty-state">
+            <i class="fas fa-clipboard-list quiz-empty-icon"></i>
+            <h3 class="quiz-empty-title">No Results Available</h3>
+            <p class="quiz-empty-message">No quiz results have been recorded yet</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

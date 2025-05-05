@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block title %} Quiz {% endblock %}
+{% load static %}
+{% block content %}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog">
+    <div class="modal-content" style="color: black;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-title"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      {% if user.is_authenticated %}
+      <div class="modal-body" id="modal-body">
+        <!-- Dynamic content inserted here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" id="start-quiz" class="btn btn-primary">Start Quiz</button>
+      </div>
+      {% else %}
+      <div class="modal-body">
+        <h3>Login first to start the quiz</h3>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a href="/login" class="btn btn-primary">Login</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Quiz Cards -->
+<br><br><br>
+<div class="container">
+  <div class="container mx-auto mt-2">
+    <div class="row">
+      {% for quiz in quiz %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100" style="width: 21rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ quiz.name }}</h5>
+            <div class="card-text mb-3">
+              {{ quiz.desc }}
+            </div>
+            <div class="card-footer mt-auto bg-transparent border-top-0">
+              <button 
+                data-bs-toggle="modal" 
+                data-bs-target="#exampleModal" 
+                data-id="{{ quiz.id }}" 
+                data-name="{{ quiz.name }}" 
+                data-questions="{{ quiz.number_of_questions }}" 
+                data-time="{{ quiz.time }}" 
+                class="btn btn-primary modal-button">
+                <i class="fas fa-play-circle"></i> Attempt Quiz
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const modalButtons = document.querySelectorAll('.modal-button');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+    const modalElement = document.getElementById('exampleModal');
+    const bootstrapModal = new bootstrap.Modal(modalElement);
+    let currentQuizId = null;
+
+    // Clear focus before modal hides (fixes aria-hidden issue)
+    modalElement.addEventListener('hide.bs.modal', () => {
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+    });
+
+    modalButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        currentQuizId = this.getAttribute('data-id');
+        const name = this.getAttribute('data-name');
+        const numberOfQuestions = this.getAttribute('data-questions');
+        const time = this.getAttribute('data-time');
+
+        modalTitle.textContent = name;
+        modalBody.innerHTML = `
+          <div class="quiz-info">
+            <p><i class="fas fa-question-circle"></i> <strong>${numberOfQuestions}</strong> questions</p>
+            <p><i class="fas fa-clock"></i> Time limit: <strong>${time}</strong> minutes</p>
+            <p><i class="fas fa-info-circle"></i> After completing the quiz, click submit to see your score</p>
+            <p class="text-center mt-3"><strong>All the best! <i class="fas fa-thumbs-up"></i></strong></p>
+          </div>
+        `;
+      });
+    });
+
+    // Bind quiz start button
+    const startButton = document.getElementById('start-quiz');
+    startButton.addEventListener('click', function () {
+      if (!currentQuizId) {
+        alert('No quiz selected!');
+        return;
+      }
+
+      // Hide modal first (fix accessibility/focus)
+      bootstrapModal.hide();
+
+      modalElement.addEventListener('hidden.bs.modal', function handler() {
+        modalElement.removeEventListener('hidden.bs.modal', handler);
+        // Now safely redirect
+        window.location.href = `/index/${currentQuizId}/`;
+      });
+    });
+  });
+</script>
+{% endblock %}

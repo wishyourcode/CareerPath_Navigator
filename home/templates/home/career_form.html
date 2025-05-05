@@ -1,0 +1,297 @@
+{% extends 'base.html' %}
+{% block title %}Career Recommendation{% endblock %}
+
+{% block content %}
+<div class="piyush-container py-4">
+  <div class="piyush-row justify-center">
+    <div class="piyush-col-lg-10 piyush-col-md-12">
+      <div class="piyush piyush-primary">
+        <div class="piyush-body">
+          <div class="piyush-text-center mb-4">
+            <h2 class="piyush-title">🎓 Career Recommendation</h2>
+            <div class="piyush-divider"></div>
+          </div>
+          
+          {% if form_errors %}
+          <div class="piyush-alert piyush-alert-danger">
+            <strong>Error!</strong>
+            <ul class="piyush-list-unstyled">
+              {% for error in form_errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+          
+          {% if form.errors %}
+          <div class="piyush-alert piyush-alert-danger">
+            <strong>Please correct these errors:</strong>
+            <ul class="piyush-list-unstyled">
+              {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                  <li>{{ field|title }}: {{ error }}</li>
+                {% endfor %}
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+
+          <form method="post" id="careerForm" class="piyush-form">
+            {% csrf_token %}
+            
+            <div class="piyush-row">
+              <!-- Basic Fields -->
+              <div class="piyush-mb-3 piyush-col-md-6">
+                <label for="id_class10" class="piyush-label">{{ form.class10.label }}</label>
+                {{ form.class10 }}
+                <div class="piyush-error">{{ form.class10.errors }}</div>
+              </div>
+              <div class="piyush-mb-3 piyush-col-md-6">
+                <label for="id_class11" class="piyush-label">{{ form.class11.label }}</label>
+                {{ form.class11 }}
+                <div class="piyush-error">{{ form.class11.errors }}</div>
+              </div>
+              <div class="piyush-mb-3 piyush-col-md-6">
+                <label for="id_stream" class="piyush-label">{{ form.stream.label }}</label>
+                {{ form.stream }}
+                <div class="piyush-error">{{ form.stream.errors }}</div>
+              </div>
+              <div class="piyush-mb-3 piyush-col-md-6">
+                <label for="id_interest" class="piyush-label">{{ form.interest.label }}</label>
+                <select name="interest" id="id_interest" class="piyush-select">
+                  <option value="" selected disabled>Select your interest</option>
+                  {% for value, label in form.interest.field.choices %}
+                    {% if value %}
+                      <option value="{{ value }}" {% if form.interest.value == value %}selected{% endif %}>{{ label }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+                <div class="piyush-error">{{ form.interest.errors }}</div>
+              </div>
+            </div>
+            
+            <!-- Subject Fields -->
+            <div id="subjectFields">
+              <!-- Science-Maths Subjects -->
+              <div class="piyush-subject-group" id="science-maths-group">
+                <h5 class="piyush-subject-heading">Science (Maths) Subjects</h5>
+                <div class="piyush-row-vishal">
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_physics_maths" class="piyush-label">Physics</label>
+                    <input type="number" name="physics" min="35" max="100" class="piyush-input subject-input" id="id_physics_maths" data-stream="Science-Maths,Science-Bio" {% if form.physics.value %}value="{{ form.physics.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.physics.errors }}</div>
+                  </div>
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_chemistry_maths" class="piyush-label">Chemistry</label>
+                    <input type="number" name="chemistry" min="35" max="100" class="piyush-input subject-input" id="id_chemistry_maths" data-stream="Science-Maths,Science-Bio" {% if form.chemistry.value %}value="{{ form.chemistry.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.chemistry.errors }}</div>
+                  </div>
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_maths" class="piyush-label">Maths</label>
+                    <input type="number" name="maths" min="35" max="100" class="piyush-input subject-input" id="id_maths" data-stream="Science-Maths" {% if form.maths.value %}value="{{ form.maths.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.maths.errors }}</div>
+                  </div>
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_english_maths" class="piyush-label">English</label>
+                    <input type="number" name="english" min="35" max="100" class="piyush-input subject-input" id="id_english_maths" data-stream="Science-Maths,Science-Bio,Commerce,Arts" {% if form.english.value %}value="{{ form.english.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.english.errors }}</div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Science-Bio Subjects -->
+              <div class="piyush-subject-group" id="science-bio-group">
+                <h5 class="piyush-subject-heading">Science (Biology) Subjects</h5>
+                <div class="piyush-row-vishal">
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_physics_bio" class="piyush-label">Physics</label>
+                    <input type="number" name="physics" min="35" max="100" class="piyush-input subject-input" id="id_physics_bio" data-stream="Science-Maths,Science-Bio" {% if form.physics.value %}value="{{ form.physics.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.physics.errors }}</div>
+                  </div>
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_chemistry_bio" class="piyush-label">Chemistry</label>
+                    <input type="number" name="chemistry" min="35" max="100" class="piyush-input subject-input" id="id_chemistry_bio" data-stream="Science-Maths,Science-Bio" {% if form.chemistry.value %}value="{{ form.chemistry.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.chemistry.errors }}</div>
+                  </div>
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_biology" class="piyush-label">Biology</label>
+                    <input type="number" name="biology" min="35" max="100" class="piyush-input subject-input" id="id_biology" data-stream="Science-Bio" {% if form.biology.value %}value="{{ form.biology.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.biology.errors }}</div>
+                  </div>
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_english_bio" class="piyush-label">English</label>
+                    <input type="number" name="english" min="35" max="100" class="piyush-input subject-input" id="id_english_bio" data-stream="Science-Maths,Science-Bio,Commerce,Arts" {% if form.english.value %}value="{{ form.english.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.english.errors }}</div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Commerce Subjects -->
+              <div class="piyush-subject-group" id="commerce-group">
+                <h5 class="piyush-subject-heading">Commerce Subjects</h5>
+                <div class="piyush-row-vishal">
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_accountancy" class="piyush-label">Accountancy</label>
+                    <input type="number" name="accountancy" min="35" max="100" class="piyush-input subject-input" id="id_accountancy" data-stream="Commerce" {% if form.accountancy.value %}value="{{ form.accountancy.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.accountancy.errors }}</div>
+                  </div>
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_business_studies" class="piyush-label">Business Studies</label>
+                    <input type="number" name="business_studies" min="35" max="100" class="piyush-input subject-input" id="id_business_studies" data-stream="Commerce" {% if form.business_studies.value %}value="{{ form.business_studies.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.business_studies.errors }}</div>
+                  </div>
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_economics" class="piyush-label">Economics</label>
+                    <input type="number" name="economics" min="35" max="100" class="piyush-input subject-input" id="id_economics" data-stream="Commerce" {% if form.economics.value %}value="{{ form.economics.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.economics.errors }}</div>
+                  </div>
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_english_commerce" class="piyush-label">English</label>
+                    <input type="number" name="english" min="35" max="100" class="piyush-input subject-input" id="id_english_commerce" data-stream="Science-Maths,Science-Bio,Commerce,Arts" {% if form.english.value %}value="{{ form.english.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.english.errors }}</div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Arts Subjects -->
+              <div class="piyush-subject-group" id="arts-group">
+                <h5 class="piyush-subject-heading">Arts Subjects</h5>
+                <div class="piyush-row-vishal">
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_history" class="piyush-label">History</label>
+                    <input type="number" name="history" min="35" max="100" class="piyush-input subject-input" id="id_history" data-stream="Arts" {% if form.history.value %}value="{{ form.history.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.history.errors }}</div>
+                  </div>
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_geography" class="piyush-label">Geography</label>
+                    <input type="number" name="geography" min="35" max="100" class="piyush-input subject-input" id="id_geography" data-stream="Arts" {% if form.geography.value %}value="{{ form.geography.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.geography.errors }}</div>
+                  </div>
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_political_science" class="piyush-label">Political Science</label>
+                    <input type="number" name="political_science" min="35" max="100" class="piyush-input subject-input" id="id_political_science" data-stream="Arts" {% if form.political_science.value %}value="{{ form.political_science.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.political_science.errors }}</div>
+                  </div>
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_sociology" class="piyush-label">Sociology</label>
+                    <input type="number" name="sociology" min="35" max="100" class="piyush-input subject-input" id="id_sociology" data-stream="Arts" {% if form.sociology.value %}value="{{ form.sociology.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.sociology.errors }}</div>
+                  </div>
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_psychology" class="piyush-label">Psychology</label>
+                    <input type="number" name="psychology" min="35" max="100" class="piyush-input subject-input" id="id_psychology" data-stream="Arts" {% if form.psychology.value %}value="{{ form.psychology.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.psychology.errors }}</div>
+                  </div>
+                  <div class="piyush-mb-3 piyush-col-md-6">
+                    <label for="id_english_arts" class="piyush-label">English</label>
+                    <input type="number" name="english" min="35" max="100" class="piyush-input subject-input" id="id_english_arts" data-stream="Science-Maths,Science-Bio,Commerce,Arts" {% if form.english.value %}value="{{ form.english.value }}"{% endif %}>
+                    <div class="piyush-error">{{ form.english.errors }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="piyush-text-center piyush-mt-4" id="submitButton">
+              <button type="submit" class="piyush-btn piyush-btn-primary">
+                🔍 Predict Career
+              </button>
+            </div>
+          </form>
+
+          {% if prediction %}
+            <div class="piyush-result piyush-text-center piyush-mt-4">
+              🔮 Recommended Career:{{ prediction }}
+              <button id="resetForm" class="piyush-btn piyush-btn-secondary piyush-mt-3">
+                ↻ Start New Recommendation
+              </button>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const submitButton = document.getElementById('submitButton');
+      const streamSelect = document.getElementById('id_stream');
+      const form = document.getElementById('careerForm');
+      const predictButton = form.querySelector('button[type="submit"]');
+      const subjectGroups = {
+        'Science-Maths': document.getElementById('science-maths-group'),
+        'Science-Bio': document.getElementById('science-bio-group'),
+        'Commerce': document.getElementById('commerce-group'),
+        'Arts': document.getElementById('arts-group')
+      };
+  
+      function updateSubjectFields() {
+        const selectedStream = streamSelect.value;
+  
+        // Hide all groups
+        Object.values(subjectGroups).forEach(group => {
+          if (group) group.style.display = 'none';
+        });
+  
+        // Show selected
+        if (selectedStream && subjectGroups[selectedStream]) {
+          subjectGroups[selectedStream].style.display = 'block';
+        }
+  
+        // Update required fields
+        const allSubjectInputs = form.querySelectorAll('.subject-input');
+        allSubjectInputs.forEach(input => {
+          const streams = input.dataset.stream ? input.dataset.stream.split(',') : [];
+          const isVisible = streams.includes(selectedStream) &&
+                            input.closest('.piyush-subject-group').style.display !== 'none';
+          input.required = isVisible;
+        });
+      }
+  
+      // Initialize on page load
+      updateSubjectFields();
+  
+      streamSelect.addEventListener('change', updateSubjectFields);
+  
+      // Form Submission Handler
+      form.addEventListener('submit', function(e) {
+        updateSubjectFields();
+        
+        let isValid = true;
+        const visibleInputs = form.querySelectorAll('input.subject-input');
+        visibleInputs.forEach(input => {
+          if (input.required && !input.value.trim()) {
+            if (isValid) input.focus();
+            input.classList.add('piyush-input-error');
+            isValid = false;
+          } else {
+            input.classList.remove('piyush-input-error');
+          }
+          submitButton.removebtn();
+        });
+  
+        if (!isValid) {
+          e.preventDefault();
+          alert('Please fill all required fields');
+          return;
+        }
+  
+        // Hide the predict button on submit (after server renders prediction)
+        predictButton.style.display = 'none';
+      });
+  
+      // Reset Form Handler
+      const resetButton = document.getElementById('resetForm');
+      if (resetButton) {
+        resetButton.addEventListener('click', function() {
+          form.reset();
+          document.getElementById('id_interest').selectedIndex = 0;
+          updateSubjectFields();
+          document.querySelector('.piyush-result').style.display = 'none';
+          predictButton.style.display = 'inline-block'; // Bring back Predict button
+          const inputs = form.querySelectorAll('input.subject-input');
+          inputs.forEach(input => input.value = ''); // Clear values
+        });
+      }
+    });
+  </script>  
+{% endblock %}

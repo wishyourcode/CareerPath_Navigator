@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% block content %}
+<script>
+    // Function to open a specific modal based on the ID
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+    }
+
+    // Function to close a specific modal based on the ID
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+        document.body.style.overflow = 'auto'; // Re-enable scrolling
+    }
+
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target.className === 'modal-hidden') {
+            event.target.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+</script>
+
+<div class="career-coach-profiles">
+    <div class="coaches-header">
+        <h1>Find Your Ideal Career Coach</h1>
+        <p>Our certified career coaches specialize in helping students and professionals achieve their career aspirations. Schedule a consultation to start your journey.</p>
+    </div>
+    
+    <!-- First Coach Card -->
+    <div class="coach-card-section">
+        <div class="coach-info-section">
+            <img class="coach-profile-image" src="{% static 'profile.png'%}" alt="Anjali Saraogi">
+            <div class="coach-details">
+                <h3 class="coach-name">Manthan Joshi</h3>
+                <p class="coach-reviews"><span class="rating-stars">★★★★★</span> 253 Reviews</p>
+                <p class="coach-description">
+                    Best Certified Career Coach | Award-Winning Career Counselor | Specialist in personalized Strategic Career Planning for India & abroad. Helping clients navigate career transitions with personalized strategies.
+                </p>
+                <p class="coach-location">Malad | Mumbai</p>
+                <div class="coach-tag-section">
+                    <button class="tag-button">Abroad Studies</button>
+                    <button class="tag-button">Students</button>
+                    <button class="tag-button">Professionals</button>
+                    <button class="tag-button">Career Transition</button>
+                </div>
+                <p class="coach-experience">🌐 Experience: 3 yrs | Counselling: 2019 Sessions</p>
+                <p class="coach-availability">Available On: <span class="highlight-text">Monday to Friday (10:00 AM - 7:00 PM)</span></p>
+            </div>
+        </div>
+        <div class="coach-appointment-section">
+            <h4 style="color: var(--primary-color); margin-top: 0; margin-bottom: 1.5rem;">Schedule Your Sessions</h4>
+            <ul class="appointment-details">
+                <li>1 Hour Counselling Duration</li>
+                <li>Resume Review & Optimization</li>
+                <li>LinkedIn Profile Optimization</li>
+                <li>Interview Preparation Guide</li>
+            </ul>
+            <p class="last-session">🕒 Last session booked: Today at 3:45 PM</p>
+            <button class="callback-button" onclick="openModal('modal-anjali')">Request Call Back</button>
+            <button class="message-button">Send Message</button>
+        </div>
+    </div>
+
+    <!-- Second Coach Card -->
+    <div class="coach-card-section">
+        <div class="coach-info-section">
+            <img class="coach-profile-image" src="{% static 'profile.png'%}" alt="Coach Saira Kale">
+            <div class="coach-details">
+                <h3 class="coach-name">Reena Kothari</h3>
+                <p class="coach-reviews"><span class="rating-stars">★★★★☆</span> 789 Sessions</p>
+                <p class="coach-description">
+                    Certified Career Coach | Expertise in professional development and job placement counseling. Special focus on helping mid-career professionals navigate transitions and achieve career growth.
+                </p>
+                <p class="coach-location">Thane | Mumbai</p>
+                <div class="coach-tag-section">
+                    <button class="tag-button">Students</button>
+                    <button class="tag-button">Professionals</button>
+                    <button class="tag-button">Mid-Career</button>
+                </div>
+                <p class="coach-experience">🌐 Experience: 5 yrs | Counselling: 789+ Sessions</p>
+                <p class="coach-availability">Available On: <span class="highlight-text">Tuesday to Saturday (11:00 AM - 5:00 PM) </span></p>
+            </div>
+        </div>
+        <div class="coach-appointment-section">
+            <h4 style="color: var(--primary-color); margin-top: 0; margin-bottom: 1.5rem;">Schedule Your Sessions</h4>
+            <ul class="appointment-details">
+                <li>Four Detailed Counselling Sessions</li>
+                <li>1 Hour Counselling Duration</li>
+                <li>Career Assessment Tests</li>
+                <li>Job Search Strategy</li>
+            </ul>
+            <p class="last-session">🕒 Last session booked: 2 days ago</p>
+            <button class="callback-button" onclick="openModal('modal-saira')">Request Call Back</button>
+            <button class="message-button">Send Message</button>
+        </div>
+    </div>
+
+    <!-- Third Coach Card -->
+    <div class="coach-card-section">
+        <div class="coach-info-section">
+            <img class="coach-profile-image" src="{% static 'profile.png'%}" alt="Coach Ramesh Desai">
+            <div class="coach-details">
+                <h3 class="coach-name">Swati Bhatt</h3>
+                <p class="coach-reviews"><span class="rating-stars">★★★★★</span> 350 Sessions</p>
+                <p class="coach-description">
+                    Leadership and Career Development Expert | Professional coach in skill-building and job transitions. Specializes in executive coaching and leadership development programs.
+                </p>
+                <p class="coach-location">Mira road | Mumbai</p>
+                <div class="coach-tag-section">
+                    <button class="tag-button">Leadership</button>
+                    <button class="tag-button">Career Transitions</button>
+                    <button class="tag-button">Executives</button>
+                </div>
+                <p class="coach-experience">🌐 Experience: 10 yrs | Counselling: 1200+ Sessions</p>
+                <p class="coach-availability">Available On: <span class="highlight-text">Monday Friday (9:00 AM - 6:00 PM) </span></p>
+            </div>
+        </div>
+        <div class="coach-appointment-section">
+            <h4 style="color: var(--primary-color); margin-top: 0; margin-bottom: 1.5rem;">Schedule Your Sessions</h4>
+            <ul class="appointment-details">
+                <li>Three Detailed Counselling Sessions</li>
+                <li>1.5 Hour Counselling Duration</li>
+                <li>Leadership Assessment</li>
+                <li>Executive Presence Coaching</li>
+            </ul>
+            <p class="last-session">🕒 Last session booked: 3 days ago</p>
+            <button class="callback-button" onclick="openModal('modal-ramesh')">Request Call Back</button>
+            <button class="message-button">Send Message</button>
+        </div>
+    </div>
+
+    <!-- Fourth Coach Card -->
+    <div class="coach-card-section">
+        <div class="coach-info-section">
+            <img class="coach-profile-image" src="{% static 'profile.png'%}" alt="Coach Meera Nair">
+            <div class="coach-details">
+                <h3 class="coach-name">Surekha Mali</h3>
+                <p class="coach-reviews"><span class="rating-stars">★★★★☆</span> 400 Sessions</p>
+                <p class="coach-description">
+                    Career Counseling Specialist | Expert in educational and career guidance for students and professionals. Focuses on helping recent graduates launch their careers successfully.
+                </p>
+                <p class="coach-location">Andheri | Mumbai</p>
+                <div class="coach-tag-section">
+                    <button class="tag-button">Students</button>
+                    <button class="tag-button">Professionals</button>
+                    <button class="tag-button">Recent Graduates</button>
+                </div>
+                <p class="coach-experience">🌐 Experience: 2 yrs | Counselling: 900+ Sessions</p>
+                <p class="coach-availability">Available On: <span class="highlight-text">monday (10AM - 4PM) and Sunday (1:00 PM - 5:00 PM)</span></p>
+            </div>
+        </div>
+        <div class="coach-appointment-section">
+            <h4 style="color: var(--primary-color); margin-top: 0; margin-bottom: 1.5rem;">Schedule Your Sessions</h4>
+            <ul class="appointment-details">
+                <li>Five Detailed Counselling Sessions</li>
+                <li>1 Hour Counselling Duration</li>
+                <li>Internship Guidance</li>
+                <li>Entry-Level Job Strategies</li>
+            </ul>
+            <p class="last-session">🕒 Last session booked: 1 week ago</p>
+            <button class="callback-button" onclick="openModal('modal-meera')">Request Call Back</button>
+            <button class="message-button">Send Message</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Anjali Saraogi -->
+<div id="modal-anjali" class="modal-hidden">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal('modal-anjali')">&times;</span>
+        <div class="modal-profile-info">
+            <img class="modal-profile-image" src="{% static 'profile.png'%}" alt="Anjali Saraogi">
+            <h2>Connect with Manthan joshi</h2>
+            <p>Best Certified Career Coach | Award-Winning Career Counselor | Career Planning Specialist</p>
+        </div>
+        <form>
+            <p class="modal-prompt">Enter your mobile number to continue</p>
+            <input type="tel" placeholder="+91 Mobile Number" class="mobile-input" pattern="[0-9]{10}" required>
+            <p class="mobile-info">We'll send appointment details and reminders to this number</p>
+            <button type="submit" class="modal-continue-button">Schedule Appointment</button>
+        </form>
+        <p style="text-align: center; font-size: 0.8rem; color: var(--text-light); margin-top: 1rem;">Your information is secure and will not be shared</p>
+    </div>
+</div>
+
+<!-- Modal for Coach Saira Kale -->
+<div id="modal-saira" class="modal-hidden">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal('modal-saira')">&times;</span>
+        <div class="modal-profile-info">
+            <img class="modal-profile-image" src="{% static 'profile.png'%}" alt="Saira Kale">
+            <h2>Connect with Reena Kothari</h2>
+            <p>Certified Career Coach | Professional Development Expert</p>
+        </div>
+        <form>
+            <p class="modal-prompt">Enter your mobile number to continue</p>
+            <input type="tel" placeholder="+91 Mobile Number" class="mobile-input" pattern="[0-9]{10}" required>
+            <p class="mobile-info">We'll send appointment details and reminders to this number</p>
+            <button type="submit" class="modal-continue-button">Schedule Appointment</button>
+        </form>
+        <p style="text-align: center; font-size: 0.8rem; color: var(--text-light); margin-top: 1rem;">Your information is secure and will not be shared</p>
+    </div>
+</div>
+
+<!-- Modal for Coach Ramesh Desai -->
+<div id="modal-ramesh" class="modal-hidden">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal('modal-ramesh')">&times;</span>
+        <div class="modal-profile-info">
+            <img class="modal-profile-image" src="{% static 'profile.png'%}" alt="Ramesh Desai">
+            <h2>Connect with Swati Bhatt</h2>
+            <p>Leadership Development Expert | Executive Career Coach</p>
+        </div>
+        <form>
+            <p class="modal-prompt">Enter your mobile number to continue</p>
+            <input type="tel" placeholder="+91 Mobile Number" class="mobile-input" pattern="[0-9]{10}" required>
+            <p class="mobile-info">We'll send appointment details and reminders to this number</p>
+            <button type="submit" class="modal-continue-button">Schedule Appointment</button>
+        </form>
+        <p style="text-align: center; font-size: 0.8rem; color: var(--text-light); margin-top: 1rem;">Your information is secure and will not be shared</p>
+    </div>
+</div>
+
+<!-- Modal for Coach Meera Nair -->
+<div id="modal-meera" class="modal-hidden">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal('modal-meera')">&times;</span>
+        <div class="modal-profile-info">
+            <img class="modal-profile-image" src="{% static 'profile.png'%}" alt="Meera Nair">
+            <h2>Connect with Surekha Mali</h2>
+            <p>Career Counseling Specialist | Student Guidance Expert</p>
+        </div>
+        <form>
+            <p class="modal-prompt">Enter your mobile number to continue</p>
+            <input type="tel" placeholder="+91 Mobile Number" class="mobile-input" pattern="[0-9]{10}" required>
+            <p class="mobile-info">We'll send appointment details and reminders to this number</p>
+            <button type="submit" class="modal-continue-button">Schedule Appointment</button>
+        </form>
+        <p style="text-align: center; font-size: 0.8rem; color: var(--text-light); margin-top: 1rem;">Your information is secure and will not be shared</p>
+    </div>
+</div>
+
+{% endblock %}

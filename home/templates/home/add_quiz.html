@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block title %}Add Quiz{% endblock %}
+
+{% block content %}
+<div class="piyush-container py-4">
+    <!-- Add Quiz -->
+    <div class="piyush-row justify-center mb-4">
+        <div class="piyush-col-lg-8">
+            <div class="piyush piyush-primary">
+                <div class="piyush-body">
+                    <div class="piyush-text-center mb-4">
+                        <h3 class="piyush-title">Add New Quiz</h3>
+                        <div class="piyush-divider"></div>
+                    </div>
+                    
+                    <form action="/add_quiz/" method="POST" class="piyush-form"> 
+                        {% csrf_token %}
+                        <div class="piyush-mb-4">
+                            {% for field in form %}
+                            <div class="piyush-form-group">
+                                <label for="{{ field.id_for_label }}" class="piyush-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                <small class="piyush-help-text">{{ field.help_text }}</small>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="piyush-text-center piyush-mt-3">
+                            <button type="submit" class="piyush-btn piyush-btn-primary">
+                                Add Quiz
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manage Quizzes Section -->
+    <div class="piyush-row justify-center">
+        <div class="piyush-col-lg-8">
+            <div class="piyush piyush-secondary">
+                <div class="piyush-body">
+                    <div class="piyush-text-center mb-4">
+                        <h3 class="piyush-title">Manage Quizzes</h3>
+                        <div class="piyush-divider"></div>
+                    </div>
+                    
+                    {% if quizzes %}
+                    <div class="piyush-table-wrap">
+                        <table class="piyush-table">
+                            <thead class="piyush-table-head">
+                                <tr>
+                                    <th>Quiz Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for quiz in quizzes %}
+                                <tr class="piyush-table-row">
+                                    <td class="piyush-table-data">{{ quiz.name }}</td>
+                                    <td class="piyush-table-data">
+                                        <a href="{% url 'confirm_quiz_delete' quiz.id %}" class="piyush-btn piyush-btn-danger">
+                                            <i class="fas fa-trash-alt"></i> Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="piyush-text-center">
+                        <i class="fas fa-info-circle" style="color: #7f8c8d;"></i> 
+                        <p style="color: #7f8c8d;">No quizzes available to delete</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal (Hidden by default) -->
+{% if success %}
+<div class="piyush-modal">
+    <div class="piyush-modal-dialog">
+        <div class="piyush-modal-content">
+            <div class="piyush-modal-header">
+                <h5 class="piyush-modal-title">
+                    <i class="fas fa-check-circle"></i>
+                    Quiz Created!
+                </h5>
+                <div class="piyush-modal-close-container">
+                    <span class="piyush-modal-close">&times;</span>
+                </div>
+            </div>
+            <div class="piyush-modal-body">
+                <div class="piyush-modal-icon-container">
+                    <i class="fas fa-trophy"></i>
+                    <p>Your quiz "<strong>{{ obj.name }}</strong>" has been successfully created!</p>
+                </div>
+                <div class="piyush-modal-button-container">
+                    <a href="/add_quiz/" class="piyush-btn piyush-modal-btn">
+                        <i class="fas fa-plus-circle"></i> New Quiz
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

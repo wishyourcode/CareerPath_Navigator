@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="nopadding">
+<div class="approved-faculty-container">
+    <div class="approved-faculty-header">
+        <div class="approved-header-content">
+            <h2 class="approved-faculty-title">Approved Faculty Members</h2>
+            <p class="approved-faculty-subtitle">Manage all approved faculty accounts</p>
+        </div>
+        <div class="approved-faculty-count">
+            <div class="approved-count-icon">
+                <i class="fas fa-user-check"></i>
+            </div>
+            <div class="approved-count-content">
+                <span class="approved-count-number">{{ approved_faculty.count }}</span>
+                <span class="approved-count-label">Approved Members</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="approved-faculty-actions">
+        <a href="{% url 'pending_approvals' %}" class="approved-btn approved-btn-action">
+            <i class="fas fa-user-clock"></i> 
+            <span>View Pending Approvals</span>
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+
+    {% if approved_faculty %}
+    <div class="approved-table-responsive">
+        <table class="approved-faculty-table">
+            <thead>
+                <tr>
+                    <th class="approved-name">Name</th>
+                    <th class="approved-username">Username</th>
+                    <th class="approved-email">Email</th>
+                    <th class="approved-date">Join Date</th>
+                    <th class="approved-actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for faculty in approved_faculty %}
+                <tr>
+                    <td class="approved-name" data-label="Name">
+                        {{ faculty.get_full_name|default:faculty.username }}
+                    </td>
+                    <td class="approved-username" data-label="Username">
+                        <span class="approved-username-badge">@{{ faculty.username }}</span>
+                    </td>
+                    <td class="approved-email" data-label="Email">
+                        <a href="mailto:{{ faculty.email }}">
+                            <i class="fas fa-envelope"></i>
+                            {{ faculty.email }}
+                        </a>
+                    </td>
+                    <td class="approved-date" data-label="Joined">
+                        <i class="far fa-calendar-alt"></i>
+                        {{ faculty.date_joined|date:"M d, Y" }}
+                    </td>
+                    <td class="approved-actions" data-label="Actions">
+                        <div class="approved-action-buttons">
+                            <a href="{% url 'delete_faculty' faculty.id %}" class="approved-btn-action approved-delete" title="Delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    {% else %}
+    <div class="approved-no-faculty-message">
+        <div class="approved-empty-state">
+            <div class="approved-empty-icon">
+                <i class="fas fa-user-check"></i>
+            </div>
+            <h3>No Approved Faculty Members</h3>
+            <p>There are currently no faculty accounts that have been approved.</p>
+            <a href="{% url 'pending_approvals' %}" class="approved-btn approved-btn-primary">
+                <i class="fas fa-user-clock"></i> Review Pending Approvals
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+</div>
+{% endblock %}

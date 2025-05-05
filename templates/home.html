@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% block content %}
+<section class="services">
+  <div class="container">
+    <h1 class="section-title">We Provide</h1>
+    <p class="section-subtitle">Professional guidance to help you navigate your career path</p>
+    
+    <div class="service-container">
+      <!-- Service 1 -->
+      <div class="service-box">
+        <div class="service-img-container">
+          <img src="{% static 'explore.png'%}" alt="Career Guidance" class="service-img">
+        </div>
+        <div class="service-content">
+          <h2>Career Counselling</h2>
+          <p>Our professional experts provide beneficial advice for all your career-related queries and problems.</p>
+          <div class="button-container">
+            <a href="{% url 'Consult' %}" class="button">Enquire Now</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Service 2 -->
+      <div class="service-box">
+        <div class="service-img-container">
+          <img src="{% static 'counselling.png'%}" alt="College Planning" class="service-img">
+        </div>
+        <div class="service-content">
+          <h2>Career Explorations</h2>
+          <p>Discover your perfect career path with in-depth insights into courses, skills, and opportunities across every field!</p>
+          <div class="button-container">
+            <a href="{% url 'explore' %}" class="button">Enquire Now</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Service 3 -->
+      <div class="service-box">
+        <div class="service-img-container">
+          <img src="{% static 'plan.png'%}" alt="Career Explorations" class="service-img">
+        </div>
+        <div class="service-content">
+          <h2>College Planning</h2>
+          <p>Easily plan and visualize your entire UG/PG college journey, coursework, and milestones with our comprehensive interactive charts.</p>
+          <div class="button-container">
+            <a href="{% url 'Collage' %}" class="button">Enquire Now</a>
+          </div>
+        </div>
+      </div>
+      <!-- Service 4 -->
+      <div class="service-box">
+        <div class="service-img-container">
+          <img src="{% static 'recommendation.png'%}" alt="College Planning" class="service-img">
+        </div>
+        <div class="service-content">
+          <h2>Career recommendations</h2>
+          <p>Career recommendation using machine learning algorithms to analyze preferences, and suggesting optimal career paths.</p>
+          <div class="button-container">
+            <a href="{% url 'career_predict' %}" class="button">Enquire Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Importance of counselling -->
+<section class="career-counselling-section">
+  <div class="container">
+    <div class="counselling-wrapper">
+      <div class="counselling-content">
+        <h2 class="section-titleA">Why Career Counselling</h2>
+        <blockquote class="quote">"I am not what happened to me, I am what I choose to become." <span class="quote-author">— Carl Jung</span></blockquote>
+        <div class="description-container">
+          <p class="description">
+            The 'World of Work' is exploding, offering numerous career choices. Besides traditional career opportunities, many
+            new choices have emerged such as bloggers, food critics, sports managers, ethical hackers. Career counselling
+            helps you reimagine your aspirations and choose what is right for YOU.
+          </p>
+          <p class="description">
+            A common regret that we come across in informal surveys of professionals in various job roles is "I wish I knew
+            the career options that were available while I was in school. I could have been..."
+          </p>
+          <p class="description">
+            Career counselling is all about making an INFORMED CHOICE to build a successful career.
+          </p>
+        </div>
+      </div>
+      <div class="image-container">
+        <img src="{% static 'imp_of_counselling.png'%}" alt="Career Guidance" class="counselling-img">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Why Us Section -->
+<section class="why-us-section">
+  <div class="container">
+    <h1 class="section-title">Career Path Navigator Insight for you!</h1>
+    <p class="section-subtitle">Making the right decision on academic and career choices is critical for success. Career Path Navigator Insight helps you make informed choices that align with your abilities and interests.</p>
+    
+    <div class="cards">
+      <!-- Explore Careers Card -->
+      <div class="card">
+        <div class="card-icon">
+          <img src="{% static 'img1.png'%}" alt="Explore Careers">
+        </div>
+        <div class="card-content">
+          <h2 class="card-title">Explore Careers</h2>
+          <ul class="card-list">
+            <li class="card-list-item">Explore a rich library of diverse career options</li>
+            <li class="card-list-item">Access extensive information on multiple academic pathways</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Discover Yourself Card -->
+      <div class="card">
+        <div class="card-icon">
+          <img src="{% static 'img2.png'%}" alt="Discover Yourself">
+        </div>
+        <div class="card-content">
+          <h2 class="card-title">Discover Yourself</h2>
+          <ul class="card-list">
+            <li class="card-list-item">Experience India's first scientific and game-based psychometric assessment</li>
+            <li class="card-list-item">Receive a detailed report with suitable career and academic recommendations</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Get Guided Card -->
+      <div class="card">
+        <div class="card-icon">
+          <img src="{% static 'img3.png'%}" alt="Get Guided">
+        </div>
+        <div class="card-content">
+          <h2 class="card-title">Get Guided</h2>
+          <ul class="card-list">
+            <li class="card-list-item">Get access to a large pool of certified career counsellors</li>
+            <li class="card-list-item">Opt for one-on-one counselling sessions in slots of choice</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

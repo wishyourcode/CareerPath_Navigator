@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Sign Up{% endblock %}
+{% block content %}
+<div class="signup-page-wrapper">
+    <div class="signup-form-container">
+        <div class="signup-form-header">
+            <h2>Create Your Account</h2>
+        </div>
+        
+        <div class="signup-form-content">
+            <form method="POST" action="{% url 'signup' %}" id="signupForm">
+                {% csrf_token %}
+                
+                <div class="signup-form-group">
+                    <label for="id_full_name" class="signup-form-label">Full Name</label>
+                    <input type="text" placeholder="Enter your full name" class="signup-form-control" 
+                           id="id_full_name" name="full_name" value="{{ form.full_name.value|default:'' }}" required>
+                    <span class="error-message" id="full_name-error"></span>
+                </div>
+                
+                <div class="signup-form-group">
+                    <label for="id_username" class="signup-form-label">Username</label>
+                    <input type="text" placeholder="Choose a username" class="signup-form-control" 
+                           id="id_username" name="username" value="{{ form.username.value|default:'' }}" required>
+                    <span class="error-message" id="username-error"></span>
+                </div>
+                
+                <div class="signup-form-group">
+                    <label for="id_email" class="signup-form-label">Email Address</label>
+                    <input type="email" placeholder="your@email.com" class="signup-form-control" 
+                           id="id_email" name="email" value="{{ form.email.value|default:'' }}" required>
+                    <span class="error-message" id="email-error"></span>
+                </div>
+                
+                <div class="signup-form-group">
+                    <label for="id_role" class="signup-form-label">Account Type</label>
+                    <select class="signup-form-control" id="id_role" name="role" required>
+                        <option value="" disabled selected>Select your role</option>
+                        <option value="student" {% if form.role.value == 'student' %}selected{% endif %}>Student</option>
+                        <option value="faculty" {% if form.role.value == 'faculty' %}selected{% endif %}>Faculty</option>
+                       
+                    </select>
+                    <span class="error-message" id="role-error"></span>
+                </div>
+                
+                <div class="signup-form-group">
+                    <label for="id_password1" class="signup-form-label">Create Password</label>
+                    <input type="password" placeholder="At least 8 characters" class="signup-form-control" 
+                           id="id_password1" name="password1" required>
+                    <span class="error-message" id="password1-error"></span>
+                    <div class="password-requirements">
+                        <div class="requirement" id="length-req">
+                            <i class="fas"></i> At least 8 characters
+                        </div>
+                        <div class="requirement" id="number-req">
+                            <i class="fas"></i> Contains a number
+                        </div>
+                        <div class="requirement" id="special-req">
+                            <i class="fas"></i> Contains a special character
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="signup-form-group">
+                    <label for="id_password2" class="signup-form-label">Confirm Password</label>
+                    <input type="password" placeholder="Re-enter your password" class="signup-form-control" 
+                           id="id_password2" name="password2" required>
+                    <span class="error-message" id="password2-error"></span>
+                    <div id="password-match" class="error-message" style="display: none;">
+                        Passwords do not match
+                    </div>
+                </div>
+                
+                <button type="submit" class="signup-btn-submit" id="submitBtn">
+                    Sign Up Now
+                </button>
+                
+                <div class="signup-login-link">
+                    Already have an account? <a href="{% url 'login' %}">Log In</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="successModalLabel">Account Created Successfully!</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-check-circle text-success fs-1"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <p class="mb-0" id="modalMessage">You'll be redirected to the login page shortly.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Password validation
+    const password1 = document.getElementById('id_password1');
+    const password2 = document.getElementById('id_password2');
+    const passwordMatch = document.getElementById('password-match');
+    
+    // Password requirements validation
+    password1.addEventListener('input', function() {
+        const value = this.value;
+        
+        // Check length requirement
+        const lengthReq = document.getElementById('length-req');
+        if (value.length >= 8) {
+            lengthReq.classList.add('valid');
+            lengthReq.classList.remove('invalid');
+            lengthReq.querySelector('i').className = 'fas fa-check';
+        } else {
+            lengthReq.classList.add('invalid');
+            lengthReq.classList.remove('valid');
+            lengthReq.querySelector('i').className = 'fas fa-times';
+        }
+        
+        // Check number requirement
+        const numberReq = document.getElementById('number-req');
+        if (/\d/.test(value)) {
+            numberReq.classList.add('valid');
+            numberReq.classList.remove('invalid');
+            numberReq.querySelector('i').className = 'fas fa-check';
+        } else {
+            numberReq.classList.add('invalid');
+            numberReq.classList.remove('valid');
+            numberReq.querySelector('i').className = 'fas fa-times';
+        }
+        
+        // Check special character requirement
+        const specialReq = document.getElementById('special-req');
+        if (/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+            specialReq.classList.add('valid');
+            specialReq.classList.remove('invalid');
+            specialReq.querySelector('i').className = 'fas fa-check';
+        } else {
+            specialReq.classList.add('invalid');
+            specialReq.classList.remove('valid');
+            specialReq.querySelector('i').className = 'fas fa-times';
+        }
+    });
+    
+    // Password confirmation
+    password2.addEventListener('input', function() {
+        if (password1.value !== this.value) {
+            passwordMatch.style.display = 'block';
+            this.classList.add('is-invalid');
+        } else {
+            passwordMatch.style.display = 'none';
+            this.classList.remove('is-invalid');
+        }
+    });
+
+    // Form submission handler
+    $('#signupForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        // Clear previous errors
+        $('.error-message').text('').hide();
+        $('.is-invalid').removeClass('is-invalid');
+        
+        // Check password match
+        if ($('#id_password1').val() !== $('#id_password2').val()) {
+            $('#password-match').show();
+            $('#id_password2').addClass('is-invalid');
+            return;
+        }
+        
+        // Disable submit button to prevent multiple submissions
+        $('#submitBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Processing...');
+        
+        // Submit form via AJAX
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Update modal content based on response
+                    const modalTitle = $('#successModalLabel');
+                    const modalMessage = $('#modalMessage');
+                    
+                    if (response.requires_approval) {
+                        modalTitle.text('Account Submitted for Approval');
+                        modalMessage.text('Your faculty account has been created but requires admin approval. You can close this message.');
+                    } else {
+                        modalTitle.text('Account Created Successfully!');
+                        modalMessage.text('You will be redirected to the login page shortly.');
+                    }
+                    
+                    // Show success modal
+                    const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                    successModal.show();
+                    
+                    // Reset form if faculty approval is required
+                    if (response.requires_approval) {
+                        $('#signupForm')[0].reset();
+                    } else {
+                        // Redirect to login after 3 seconds for regular users
+                        setTimeout(function() {
+                            window.location.href = "{% url 'login' %}";
+                        }, 3000);
+                    }
+                } else {
+                    // Display form errors or other errors
+                    if (response.errors) {
+                        for (const field in response.errors) {
+                            const errorMessage = response.errors[field][0].message;
+                            $(`#id_${field}`).addClass('is-invalid');
+                            $(`#${field}-error`).text(errorMessage).show();
+                        }
+                    } else if (response.error) {
+                        // For non-field errors like admin creation restriction
+                        alert(response.error);
+                    }
+                }
+            },
+            error: function(xhr) {
+                alert('An error occurred. Please try again.');
+            },
+            complete: function() {
+                // Re-enable submit button
+                $('#submitBtn').prop('disabled', false).html('Sign Up Now');
+            }
+        });
+    });
+
+    // Reset form when modal is closed for faculty approval
+    $('#successModal').on('hidden.bs.modal', function () {
+        if ($('#successModalLabel').text() === 'Account Submitted for Approval') {
+            $('#signupForm')[0].reset();
+        }
+    });
+});
+</script>
+{% endblock %}

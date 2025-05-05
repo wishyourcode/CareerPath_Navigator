@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+<title>{{quiz.name}}</title>
+{% load static %}
+{% block content %} 
+<div class="nopadding">
+<div class="quiz-container animate__animated animate__fadeIn">
+    <div class="quiz-header">
+        <h1 class="quiz-title">{{quiz.name}}</h1>
+        <span class="badge timer" id="hide-time">
+            <i class="fas fa-clock"></i>  <span id="time-left"> Time Left: {{quiz.time }} minutes </span> 
+        </span>
+    </div>
+    
+    <button type="button" class="start-button">
+        <i class="fas fa-play-circle mr-2"></i> Start Quiz
+    </button>
+    <div>
+        <form id="quiz-form" class="quiz-form mt-3 mb-3">
+            {% csrf_token %}
+            <div id="quiz-box"></div>
+            <button type="submit" class="submit-button">
+                <i class="fas fa-paper-plane mr-2"></i> Submit Answers
+            </button>
+        </form>
+        <div class="total-score" id="total" style="display: none;"></div> 
+        <div id="result-box" class="results-container"></div>      
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    const url = window.location.href
+    const quizBox = document.getElementById('quiz-box')
+    const resultBox = document.getElementById('result-box')
+    const totalScore = document.getElementById('total')
+    let timerInterval;
+    
+    $.ajax({
+        type: 'GET',
+        url: `${url}data`,
+        success: function(response){
+            const data = response.data
+            data.forEach(ele => {
+                for (const [question, answers] of Object.entries(ele)){
+                    quizBox.innerHTML += `
+                        <div class="mb-3 question-text">
+                            <b>${question}</b>
+                        </div>
+                    `
+                    
+                    answers.forEach(answer=>{
+                        quizBox.innerHTML += `
+                            <div class="answer-container">
+                                <input type="radio" class="radio-input ans" id="${question}-${answer}" name="${question}" value="${answer}">
+                                <label for="${question}-${answer}" class="answer-label">${answer}</label>
+                            </div>
+                        `
+                    });
+                }
+            });
+        },
+        error: function(error){
+            console.log(error)
+        }
+    });
+
+    // Timer countdown with minutes:seconds format
+    // Timer countdown with minutes:seconds format
+document.addEventListener('DOMContentLoaded', () => {
+    const timeLeftDisplay = document.querySelector('#time-left');
+    const timerBadge = document.querySelector('.timer');
+    const startBtn = document.querySelector('.start-button');
+    const quizForm = document.querySelector('.quiz-form');
+    const divider = document.querySelector('.divider');
+    let timeLeft = {{quiz.time}} * 60; // Convert minutes to seconds
+
+    function countDown() {
+        timerInterval = setInterval(function () {
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timeLeft = 0;
+                $(".ans").attr("disabled", true);
+                // Auto-submit when time runs out
+                if (!$('.submit-button').is(':disabled')) {
+                    sendData();
+                }
+            }
+            
+            // Format as MM:SS
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timeLeftDisplay.innerHTML = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            // Change color when time is running low
+            if (timeLeft <= 60) { // 1 minute left
+                timerBadge.classList.add('low-time');
+            } else if (timeLeft <= 300) { // 5 minutes left
+                timerBadge.style.background = '#FF9800';
+            }
+            
+            timeLeft--;
+        }, 1000);
+    }
+    
+    startBtn.addEventListener('click', () => {
+        countDown();
+        startBtn.remove();
+        // Show the quiz form
+        quizForm.style.display = 'block';
+        divider.style.display = 'block';
+        
+        // Animate the start button out and remove it
+        startBtn.classList.add('animate__animated', 'animate__fadeOut');
+        
+        // Animate the quiz form in
+        quizForm.classList.add('animate__animated', 'animate__fadeIn');
+        divider.classList.add('animate__animated', 'animate__fadeIn');
+        
+        // Remove the start button after animation completes
+        setTimeout(() => {
+            
+            $(".submit-button").show().addClass('animate__animated animate__fadeIn');
+        }, 500);
+    });
+});
+
+    const quizForm = document.getElementById('quiz-form')
+    const csrf = document.getElementsByName('csrfmiddlewaretoken')
+    
+    const sendData = () => {
+        const elements = [...document.getElementsByClassName('ans')]
+        const data = {}
+        data['csrfmiddlewaretoken'] = csrf[0].value
+        elements.forEach(el=>{
+            if (el.checked) {
+                data[el.name] = el.value
+            } else {
+                if (!data[el.name]) {
+                    data[el.name] = null
+                }
+            }
+        });
+        
+        // Disable submit button and show loading animation
+        const submitBtn = $('.submit-button');
+        submitBtn.prop('disabled', true);
+        submitBtn.html('<i class="fas fa-spinner fa-spin mr-2"></i> Submitting...');
+        
+        $.ajax({
+            type: 'POST',
+            url: `${url}save/`,
+            data: data,
+            success: function(response){
+                // Change button to "Submitted" with checkmark
+                submitBtn.html('<i class="fas fa-check-circle mr-2"></i> Submitted');
+                
+                const marks = response.marks
+                quizForm.classList.add('not-visible')
+                
+                // Enhanced score display with performance message
+                totalScore.innerHTML = `
+                    <div class="score-header">
+                        <i class="fas fa-trophy"></i>
+                        <h3>Quiz Results</h3>
+                    </div>
+                    <div class="score-value">
+                        ${response.score} <span class="score-out-of">out of {{quiz.number_of_questions}}</span>
+                    </div>
+                    <div class="performance-message">
+                        ${getPerformanceMessage(response.score, {{quiz.number_of_questions}})}
+                    </div>
+                `;
+                totalScore.style.display = 'block';
+                totalScore.classList.add('animate__animated', 'animate__bounceIn');
+
+                // Clear previous results
+                resultBox.innerHTML = '';
+                
+                // Enhanced results display
+                marks.forEach(res=>{
+                    for (const [question, resp] of Object.entries(res)){
+                        const resDiv = document.createElement("div");
+                        resDiv.classList.add('result-item', 'animate__animated', 'animate__fadeInUp');
+                        
+                        let content = '';
+                        if (resp === 'not answered') {
+                            resDiv.classList.add('not-answered');
+                            content = `
+                                <div class="question-title">
+                                    <i class="fas fa-question-circle"></i>
+                                    <strong>${question}</strong>
+                                </div>
+                                <div class="answer-status">
+                                    <span class="status-badge not-answered-badge">
+                                        <i class="fas fa-times"></i> Not answered
+                                    </span>
+                                </div>
+                            `;
+                        } else {
+                            const answer = resp['answered'];
+                            const correct = resp['correct_answer'];
+                            
+                            if (answer == correct) {
+                                resDiv.classList.add('correct-answer');
+                                content = `
+                                    <div class="question-title">
+                                        <i class="fas fa-check-circle"></i>
+                                        <strong>${question}</strong>
+                                    </div>
+                                    <div class="answer-details">
+                                        <div class="user-answer correct">
+                                            <span class="answer-label">Your answer:</span>
+                                            <span class="answer-text">${answer}</span>
+                                        </div>
+                                    </div>
+                                `;
+                            } else {
+                                resDiv.classList.add('wrong-answer');
+                                content = `
+                                    <div class="question-title">
+                                        <i class="fas fa-times-circle"></i>
+                                        <strong>${question}</strong>
+                                    </div>
+                                    <div class="answer-details">
+                                        <div class="user-answer wrong">
+                                            <span class="answer-label">Your answer:</span>
+                                            <span class="answer-text">${answer}</span>
+                                        </div>
+                                        <div class="correct-answer">
+                                            <span class="answer-label">Correct answer:</span>
+                                            <span class="answer-text">${correct}</span>
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                        }
+                        
+                        resDiv.innerHTML = content;
+                        resultBox.appendChild(resDiv);
+                    }
+                });
+            },
+            error: function(error){
+                console.log(error)
+                alert('An error occurred while submitting. Please try again.');
+                submitBtn.prop('disabled', false).html('<i class="fas fa-paper-plane mr-2"></i> Submit Answers');
+            }
+        })
+    }
+
+    // Helper function to generate performance message
+    function getPerformanceMessage(score, total) {
+        const percentage = (score / total) * 100;
+        if (percentage >= 90) return "Outstanding performance! You've mastered this material.";
+        if (percentage >= 75) return "Excellent work! You have a strong understanding.";
+        if (percentage >= 50) return "Good job! With a bit more practice you'll excel.";
+        if (percentage >= 25) return "Keep practicing! Review the material and try again.";
+        return "Don't give up! Review the material and try again.";
+    }
+
+    quizForm.addEventListener('submit', e=>{
+        e.preventDefault()
+        sendData()
+    });
+
+    $(document).ready(function () {
+        // Add answer selection effect
+        $(document).on('click', '.answer-container', function() {
+            // Remove selected class from all answers in this question group
+            const questionName = $(this).find('.radio-input').attr('name');
+            $(`input[name="${questionName}"]`).each(function() {
+                $(this).closest('.answer-container').removeClass('selected');
+            });
+            
+            // Add selected class to clicked answer
+            $(this).addClass('selected');
+            $(this).find('.radio-input').prop('checked', true);
+        });
+        
+        // Hide time when quiz is submitted
+        $(".submit-button").click(function () {
+            $(".total-score").show();
+            $("#hide-time").hide();
+            clearInterval(timerInterval);
+        });
+    });
+</script>
+{% endblock %}
