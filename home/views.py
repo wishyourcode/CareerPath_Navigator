@@ -375,7 +375,7 @@ def confirm_student_delete_view(request, student_id):
     student = get_object_or_404(CustomUser, id=student_id, role='student')
     return render(request, 'home/student_confirm_delete.html', {'student': student})
 
-@require_http_methods(["DELETE"])
+# @require_http_methods(["DELETE"])
 def delete_student_view(request, student_id):
     if not request.user.is_staff and not request.user.is_superuser:
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
